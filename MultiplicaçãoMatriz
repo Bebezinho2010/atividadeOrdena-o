@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define QTD_LINHAS 100
+#define QTD_COLUNAS 100
+
+void preencherMatrizAleatoria(int mat[][QTD_COLUNAS], int lin, int col);
+void preencherMatrizB(int mat[][QTD_COLUNAS], int lin, int col);
+void imprimirMatriz(int mat[][QTD_COLUNAS], int lin, int col);
+int lerDentroDoIntervalo(int min, int max);
+void multiplicarMatrizes(int matrizA[][QTD_COLUNAS], int linA, int colA, int matrizB[][QTD_COLUNAS], int linb, int colB, int matrizMult[][QTD_COLUNAS]);
+
+int main(){
+    int matriz[QTD_LINHAS][QTD_COLUNAS];
+    int qtd_lin, qtd_col;
+    int matrizb[QTD_LINHAS][QTD_COLUNAS];
+    int matrizmult[QTD_LINHAS][QTD_COLUNAS];
+    int linb, colb;
+
+    srand(time(0));
+
+    printf("Digite a quantidade de linhas: ");
+    qtd_lin = lerDentroDoIntervalo(1, QTD_LINHAS);
+    printf("Digite a quantidade de colunas: ");
+    qtd_col = lerDentroDoIntervalo(1, QTD_COLUNAS);
+
+    preencherMatrizAleatoria(matriz, qtd_lin, qtd_col);
+    printf("\n==============================\n");
+    imprimirMatriz(matriz, qtd_lin, qtd_col);
+    printf("\n==============================\n");
+
+    printf("Digite a quantidade de linhas: ");
+    linb = lerDentroDoIntervalo(1, QTD_LINHAS);
+    printf("Digite a quantidade de colunas: ");
+    colb = lerDentroDoIntervalo(1, QTD_COLUNAS);
+
+    preencherMatrizB(matrizb, linb, colb);
+    printf("\n==============================\n");
+    imprimirMatriz(matrizb, linb, colb);
+    printf("\n==============================\n");
+
+    if(qtd_col == linb){
+        multiplicarMatrizes(matriz, qtd_lin, qtd_col, matrizb, linb, colb, matrizmult);
+        printf("\nMatrizes multiplicadas:\n\n");
+        imprimirMatriz(matrizmult, qtd_lin, colb);
+        printf("\n");
+    }else{
+        printf("impossivel calcular a multiplicação da matriz, a quantidade de linhas da primeira matriz deve ser igual a quantidade de colunas da segunda matriz.");
+    }
+
+    return 0;
+}
+
+void preencherMatrizAleatoria(int mat[][QTD_COLUNAS], int lin, int col){
+    for(int i = 0; i < lin; i++){
+        for(int j = 0; j < col; j++){
+            mat[i][j] = rand() % 10 + 1;
+        }
+    }
+}
+
+void imprimirMatriz(int mat[][QTD_COLUNAS], int lin, int col){
+    for(int i = 0; i < lin; i++){
+        for(int j = 0; j < col; j++){
+            printf("%d\t", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void preencherMatrizB(int mat[][QTD_COLUNAS], int lin, int col){
+    for(int i = 0; i < lin; i++){
+        for(int j = 0; j < col; j++){
+            mat[i][j] = rand() % 10 + 1;
+        }
+    }
+}
+
+void multiplicarMatrizes(int matrizA[][QTD_COLUNAS], int linA, int colA, int matrizB[][QTD_COLUNAS], int linb, int colB, int matrizMult[][QTD_COLUNAS]){
+    if(colA != linb){
+        printf("Impossível fazer a multiplicação, o numero de linhas da primeira matriz deve ser igual ao número de colunas da segunda matriz.\n");
+        return;
+    }
+    for(int i = 0; i < linA; i++){
+        for(int j = 0; j < colB; j++){
+            matrizMult[i][j] = 0;
+        }
+    }
+    for(int i = 0; i < linA; i++){
+        for(int j = 0; j < colB; j++){
+            for(int k = 0; k < colA; k++){
+                matrizMult[i][j] += matrizA[i][k] * matrizB[k][j];
+            }
+        }
+    }
+}
+int lerDentroDoIntervalo(int min, int max){
+    int valor = 0;
+    scanf("%d", &valor);
+    while(valor < min || valor > max){
+        printf("Valor inválido. Digite um numero entre %d e %d.\n", min, max);
+        scanf("%d", &valor);
+    }
+    return valor;
+}
